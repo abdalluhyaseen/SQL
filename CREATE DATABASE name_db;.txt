@@ -1,48 +1,416 @@
-CREATE DATABASE name_db;
+CREATE DATABASE School_Management_System 
+____________________________________________________
+                  CREATE TABLE
 
-USE name_db;
 
-CREATE TABLE HR (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
-    password VARCHAR(100)
-  FOREIGN KEY (employees_id) REFERENCES employees(id) ON DELETE CASCADE
+CREATE TABLE Classroom 
+(
+Classroom_ID INT PRIMARY KEY AUTO_INCREMENT ,
+Classroom_Name VARCHAR (20),
+Capacity INT     
 );
 
 
-________________________________________________________________________
+
+CREATE TABLE Teacher 
+(
+Teacher_ID INT PRIMARY KEY AUTO_INCREMENT ,
+Name VARCHAR (20),
+Email VARCHAR (50) UNIQUE ,
+PhoneNumber INT ,    
+Specialization   VARCHAR (50)  
+);
+
+
+
+CREATE TABLE Student 
+(
+Student_ID INT PRIMARY KEY AUTO_INCREMENT ,
+Name VARCHAR (20),
+DateOfBirth DATE  ,
+Gender VARCHAR (20) ,    
+Classroom_ID INT  
+);
 
 
 
 
-UPDATE employees
-SET الراتب = 5500.00
-WHERE id = 1;
-
-
- _______________________________________________________________________
-
-
-DELETE FROM اسم_الجدول
-WHERE الشرط;
-
-DELETE employees
-FROM employees
-JOIN departments ON employees.department_id = departments.id
-WHERE departments.name = 'الهندسة';
-
-_______________________________________________________________________
+CREATE TABLE Course 
+(
+Course_ID INT PRIMARY KEY AUTO_INCREMENT ,
+CourseName VARCHAR (20),    
+Teacher_ID INT  
+);
 
 
 
 
-SHOW CREATE TABLE location;
 
--- حذف قيد المفتاح الأجنبي
-ALTER TABLE location
-DROP FOREIGN KEY fk_departments_id;
+CREATE TABLE Attendance 
+(
+Attendance_ID INT PRIMARY KEY AUTO_INCREMENT ,
+Status VARCHAR (20),    
+Attendance_Date  DATE  
+);
 
--- حذف العمود المرتبط
-ALTER TABLE location
-DROP COLUMN departments_id;
+
+
+
+
+
+____________________________________________________
+
+
+		ALTER ADD
+
+ALTER TABLE attendance
+ADD COLUMN course_ID INT
+
+
+
+ALTER TABLE attendance
+ADD COLUMN student_ID INT
+____________________________________________________
+
+		FOREIGN KEY
+
+
+ALTER TABLE student
+ADD CONSTRAINT student_class
+FOREIGN KEY (classroom_ID)
+REFERENCES classroom (classroom_ID)
+
+
+
+
+ALTER TABLE course
+ADD CONSTRAINT course_teacher
+FOREIGN KEY (teacher_ID)
+REFERENCES teacher (teacher_ID)
+
+
+
+
+ALTER TABLE attendance
+ADD CONSTRAINT attendance_course
+FOREIGN KEY (course_ID)
+REFERENCES course (course_ID)
+
+
+
+
+
+
+ALTER TABLE attendance
+ADD CONSTRAINT attendance_student
+FOREIGN KEY (student_ID)
+REFERENCES student (student_ID)
+
+
+
+
+
+____________________________________________________
+
+		INSERT INTO
+
+INSERT INTO classroom
+(Classroom_Name ,Capacity)
+VALUES
+('Grade 1 - A' , 30),
+('Grade 1 - B', 28) ,
+('Grade 2 - A', 32) ,
+('Grade 2 - B', 29),
+('Grade 3 - A', 31) 
+
+
+
+
+INSERT INTO teacher
+(Teacher_ID,Name ,Email,PhoneNumber,Specialization)
+VALUES
+(101, 'John Smith', 'john.smith@example.com', '123-456-7890', 'Mathematics')  ,
+(102, 'Jane Doe', 'jane.doe@example.com', '987-654-3210', 'English') ,
+(103, 'Robert Brown', 'robert.brown@example.com', '555-666-7777', 'Science') ,
+(104, 'Emily Clark', 'emily.clark@example.com', '444-555-6666', 'History'),
+(105, 'Michael Johnson', 'michael.johnson@example.com', '111-222-3333', 'Physics') 
+ 
+
+
+INSERT INTO Course
+(Course_ID,CourseName ,Teacher_ID)
+VALUES
+(201, 'Algebra I', 101) ,
+(202, 'Grammar Basics', 102) ,
+(203, 'Biology Fundamentals', 103) ,
+(204, 'World History', 104),
+(205, 'Introduction to Physics', 105)  
+
+
+
+
+INSERT INTO Student
+(Student_ID,Name ,DateOfBirth, Gender, Classroom_ID)
+VALUES
+(301, 'Alice Johnson', '2012-05-10', 'Female', 1) ,
+(302, 'David Williams', '2011-07-22', 'Male', 2) ,
+(303, 'Sophia Martinez', '2012-03-18', 'Female', 3) ,
+(304, 'James Anderson', '2011-09-30', 'Male', 4) ,
+(305, 'Olivia Thomas', '2012-01-25', 'Female', 5) ;
+ 
+
+
+
+
+ INSERT INTO attendance
+(Attendance_ID,Student_ID ,Course_ID, attendance_date, Status)
+VALUES
+(401, 301, 201, '2025-02-12', 'Present') ,
+(402, 302, 202, '2025-02-12', 'Absent') ,
+(403, 303, 203, '2025-02-12', 'Present') ,
+(404, 304, 204, '2025-02-12', 'Present') ,
+(405, 305, 205, '2025-02-12', 'Absent') 
+
+
+
+
+
+____________________________________________________
+		select_task
+
+Q1.
+SELECT name
+FROM student
+WHERE Gender = 'Female'
+
+
+Q2.
+SELECT name
+FROM teacher
+WHERE specialization = 'Mathematics' OR specialization = 'Physics';
+
+
+
+Q3.
+SELECT name
+FROM student
+WHERE DateOfBirth BETWEEN '2011-01-01' AND '2012-12-31';
+
+
+
+Q4.
+SELECT coursename, teacher_ID
+FROM course
+ORDER BY coursename ASC;
+
+
+
+
+
+Q5.
+SELECT name
+FROM student
+WHERE name LIKE 'A%';
+
+
+
+
+Q6.
+SELECT name
+FROM student
+WHERE name LIKE '%A%';
+
+
+
+
+
+Q7.
+SELECT MIN(capacity) AS minimum_value
+FROM classroom
+
+
+
+
+
+Q8.
+SELECT MAX(capacity) AS maximum_value
+FROM classroom
+
+
+
+
+Q9.
+SELECT AVG(capacity) AS  average_capacity
+FROM classroom
+
+
+
+
+Q10.
+SELECT COUNT(*) AS total_student
+FROM student;
+
+
+
+Q11.
+SELECT classroom_id, COUNT(*) AS total_students
+FROM student
+GROUP BY classroom_id;
+
+
+
+
+
+Q12.
+SELECT student.name, classroom.classroom_name
+FROM student
+INNER JOIN classroom ON student.classroom_id = classroom.classroom_id;
+
+
+
+
+
+Q13.
+SELECT teacher.Name, course.CourseName
+FROM teacher
+INNER JOIN course ON teacher.Teacher_ID = course.Teacher_ID;
+
+
+
+
+
+
+Q14.
+SELECT student.Name , attendance.Status
+FROM student
+RIGHT JOIN attendance ON student.Student_ID = attendance.student_ID;
+
+
+
+
+
+
+Q15.
+SELECT course.CourseName , teacher.Name
+FROM course
+LEFT JOIN teacher ON teacher.Teacher_ID = course.Teacher_ID  ;
+
+
+
+
+
+Q16.
+SELECT teacher.Name, course.CourseName
+FROM teacher
+LEFT JOIN course ON teacher.Teacher_ID = course.Teacher_ID;
+
+
+
+
+
+Q17.
+SELECT DISTINCT student.Name
+FROM student
+INNER JOIN attendance ON student.Student_ID = attendance.student_ID;
+
+
+
+
+
+Q18.
+SELECT student.Name
+FROM student
+LEFT JOIN attendance ON student.Student_ID = attendance.student_ID
+WHERE attendance.Attendance_Date IS NULL;
+
+
+
+
+
+
+Q19.
+SELECT course.CourseName
+FROM course
+JOIN attendance ON course.Course_ID = attendance.course_ID
+GROUP BY course.CourseName
+HAVING COUNT(DISTINCT attendance.student_ID) > 1;
+
+
+
+
+
+Q20.
+SELECT teacher.Name, COUNT(course.Course_ID) AS course_count
+FROM teacher
+JOIN course ON teacher.Teacher_ID = course.Teacher_ID
+GROUP BY teacher.Name
+ORDER BY course_count DESC
+
+
+
+
+
+
+Q21.
+SELECT student.Name 
+FROM student
+JOIN classroom ON student.Classroom_ID = classroom.Classroom_ID
+WHERE classroom.Capacity = (SELECT MAX(capacity) FROM classroom);
+
+
+
+Q22.
+SELECT course.CourseName 
+FROM course
+JOIN teacher ON teacher.Teacher_ID = course.Teacher_ID
+WHERE teacher.Name =  'John Smith';
+
+
+
+
+Q23.
+SELECT DISTINCT student.Name
+FROM student
+JOIN attendance ON student.Student_ID = attendance.student_ID
+JOIN course ON attendance.course_ID = course.Course_ID
+WHERE course.CourseName = 'Algebra I';
+
+
+
+
+
+Q24.
+SELECT Specialization, COUNT(*) AS teacher_count
+FROM teacher
+GROUP BY Specialization;
+
+
+
+
+
+
+Q25.
+SELECT course.CourseName, COUNT(attendance.student_ID) AS student_count
+FROM course
+JOIN attendance ON course.Course_ID = attendance.course_ID
+GROUP BY course.CourseName
+ORDER BY student_count DESC
+LIMIT 3;
+
+
+
+
+
+
+
+Q26.
+ SELECT student.Name
+FROM student
+LEFT JOIN attendance ON student.Student_ID = attendance.student_ID
+GROUP BY student.Name
+HAVING COUNT(attendance.Attendance_Date) = (SELECT COUNT(*) FROM course);
+
+
+
+
+
