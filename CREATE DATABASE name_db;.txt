@@ -1,0 +1,48 @@
+CREATE DATABASE name_db;
+
+USE name_db;
+
+CREATE TABLE HR (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(100)
+  FOREIGN KEY (employees_id) REFERENCES employees(id) ON DELETE CASCADE
+);
+
+
+________________________________________________________________________
+
+
+
+
+UPDATE employees
+SET الراتب = 5500.00
+WHERE id = 1;
+
+
+ _______________________________________________________________________
+
+
+DELETE FROM اسم_الجدول
+WHERE الشرط;
+
+DELETE employees
+FROM employees
+JOIN departments ON employees.department_id = departments.id
+WHERE departments.name = 'الهندسة';
+
+_______________________________________________________________________
+
+
+
+
+SHOW CREATE TABLE location;
+
+-- حذف قيد المفتاح الأجنبي
+ALTER TABLE location
+DROP FOREIGN KEY fk_departments_id;
+
+-- حذف العمود المرتبط
+ALTER TABLE location
+DROP COLUMN departments_id;
